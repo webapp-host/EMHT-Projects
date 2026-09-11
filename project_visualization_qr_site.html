@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Explore project visualization videos by category.">
+<title>Project Visualization | Explore the Work</title>
+
+<style>
+  :root {
+    --blue: #101f9f;
+    --blue-dark: #0a156f;
+    --blue-light: #eef1ff;
+    --charcoal: #454545;
+    --charcoal-dark: #303030;
+    --ink: #202020;
+    --muted: #666;
+    --line: #dfe2e8;
+    --white: #fff;
+    --page: #f5f6f8;
+    --shadow: 0 12px 35px rgba(18, 28, 60, .12);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.5;
+  }
+
+  button { font: inherit; }
+
+  /* ---------- Header ---------- */
+
+  .hero {
+    position: relative;
+    overflow: hidden;
+    background:
+      linear-gradient(115deg, rgba(8, 19, 111, .98), rgba(16, 31, 159, .90)),
+      #101f9f;
+    color: white;
+    padding: 54px 24px 62px;
+  }
+
+  /* Subtle engineering/map-inspired linework */
+  .hero::before,
+  .hero::after {
+    content: "";
+    position: absolute;
+    pointer-events: none;
+    opacity: .16;
+    border: 1px solid white;
+    transform: rotate(-8deg);
+  }
+
+  .hero::before {
+    width: 760px;
+    height: 240px;
+    right: -170px;
+    top: -90px;
+    border-radius: 50%;
+    box-shadow:
+      0 0 0 18px transparent,
+      0 0 0 19px rgba(255,255,255,.35),
+      0 0 0 42px transparent,
+      0 0 0 43px rgba(255,255,255,.25);
+  }
+
+  .hero::after {
+    width: 500px;
+    height: 180px;
+    left: -250px;
+    bottom: -120px;
+    border-radius: 50%;
+  }
+
+  .hero-inner {
+    position: relative;
+    z-index: 1;
+    width: min(1050px, 100%);
+    margin: 0 auto;
+  }
+
+  .eyebrow {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .14em;
+    text-transform: uppercase;
+    opacity: .78;
+  }
+
+  h1 {
+    max-width: 760px;
+    margin: 0;
+    font-size: clamp(32px, 5vw, 58px);
+    line-height: 1.02;
+    letter-spacing: -.025em;
+  }
+
+  .intro {
+    max-width: 720px;
+    margin: 19px 0 0;
+    font-size: clamp(16px, 2vw, 19px);
+    line-height: 1.6;
+    color: rgba(255,255,255,.90);
+  }
+
+  .instruction {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 26px;
+    padding: 11px 15px;
+    border: 1px solid rgba(255,255,255,.24);
+    border-radius: 999px;
+    background: rgba(255,255,255,.10);
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .instruction-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+    flex: 0 0 auto;
+  }
+
+  /* ---------- Main ---------- */
+
+  main {
+    width: min(1050px, calc(100% - 32px));
+    margin: 0 auto;
+    padding: 46px 0 70px;
+  }
+
+  .section-intro {
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+    gap: 24px;
+    margin-bottom: 20px;
+  }
+
+  .section-intro h2 {
+    margin: 0;
+    font-size: 25px;
+    line-height: 1.2;
+  }
+
+  .section-intro p {
+    margin: 4px 0 0;
+    color: var(--muted);
+    font-size: 14px;
+  }
+
+  .category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .category-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    min-height: 74px;
+    padding: 14px 22px;
+    border: 0;
+    border-radius: 12px;
+    background: var(--charcoal);
+    color: white;
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+    transition:
+      transform .18s ease,
+      background .18s ease,
+      box-shadow .18s ease;
+  }
+
+  .category-button::after {
+    content: "";
+    position: absolute;
+    right: 70px;
+    top: -35px;
+    width: 300px;
+    height: 130px;
+    border: 1px solid rgba(255,255,255,.08);
+    border-radius: 50%;
+    transform: rotate(-8deg);
+  }
+
+  .category-button:hover {
+    background: var(--charcoal-dark);
+    transform: translateX(4px);
+    box-shadow: 0 6px 18px rgba(0,0,0,.10);
+  }
+
+  .category-button:focus-visible {
+    outline: 3px solid #8e9aff;
+    outline-offset: 3px;
+  }
+
+  .number {
+    position: relative;
+    z-index: 1;
+    width: 35px;
+    margin-right: 18px;
+    color: rgba(255,255,255,.42);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .08em;
+  }
+
+  .category-name {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    font-size: clamp(17px, 2.4vw, 23px);
+    font-weight: 700;
+    letter-spacing: .015em;
+  }
+
+  .category-meta {
+    position: relative;
+    z-index: 1;
+    margin-right: 18px;
+    color: rgba(255,255,255,.60);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+  }
+
+  .arrow {
+    position: relative;
+    z-index: 1;
+    width: 30px;
+    height: 30px;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: rgba(255,255,255,.12);
+    font-size: 18px;
+    transition: transform .18s ease, background .18s ease;
+  }
+
+  .category-button:hover .arrow {
+    transform: translateX(3px);
+    background: rgba(255,255,255,.20);
+  }
+
+  /* ---------- Modal ---------- */
+
+  .modal {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+    background: rgba(10, 14, 28, .82);
+    backdrop-filter: blur(7px);
+  }
+
+  .modal.open {
+    display: flex;
+  }
+
+  .modal-card {
+    position: relative;
+    width: min(1180px, 100%);
+    max-height: min(850px, calc(100vh - 48px));
+    overflow: auto;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 25px 80px rgba(0,0,0,.35);
+  }
+
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .modal-title-wrap h2 {
+    margin: 0;
+    font-size: clamp(21px, 3vw, 30px);
+    line-height: 1.15;
+  }
+
+  .modal-title-wrap p {
+    margin: 5px 0 0;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .close {
+    width: 40px;
+    height: 40px;
+    flex: 0 0 auto;
+    border: 0;
+    border-radius: 50%;
+    background: #eef0f3;
+    color: #333;
+    font-size: 25px;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .close:hover {
+    background: #e0e3e8;
+  }
+
+  .modal-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1.7fr) minmax(260px, .8fr);
+    gap: 0;
+  }
+
+  .video-column {
+    padding: 24px;
+    background: #111;
+  }
+
+  .video-wrapper {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 9px;
+    background: #000;
+  }
+
+  .video-wrapper iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+
+  .video-note {
+    margin: 12px 0 0;
+    color: rgba(255,255,255,.55);
+    font-size: 11px;
+  }
+
+  .projects-column {
+    min-width: 0;
+    padding: 24px;
+    background: white;
+  }
+
+  .projects-column h3 {
+    margin: 0 0 3px;
+    color: var(--blue);
+    font-size: 18px;
+  }
+
+  .project-count {
+    margin: 0 0 15px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .project-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .project-list li {
+    position: relative;
+    padding: 10px 0 10px 18px;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+    line-height: 1.38;
+  }
+
+  .project-list li:last-child {
+    border-bottom: 0;
+  }
+
+  .project-list li::before {
+    content: "";
+    position: absolute;
+    left: 1px;
+    top: 16px;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+
+  .modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 15px;
+    padding: 14px 24px;
+    border-top: 1px solid var(--line);
+    background: #fafafa;
+  }
+
+  .footer-note {
+    margin: 0;
+    color: var(--muted);
+    font-size: 11px;
+  }
+
+  .vimeo-link {
+    color: var(--blue);
+    font-size: 12px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .vimeo-link:hover {
+    text-decoration: underline;
+  }
+
+  /* ---------- Footer ---------- */
+
+  footer {
+    padding: 26px 24px 40px;
+    text-align: center;
+    color: #858585;
+    font-size: 11px;
+  }
+
+  /* ---------- Mobile ---------- */
+
+  @media (max-width: 760px) {
+    .hero {
+      padding: 40px 20px 46px;
+    }
+
+    main {
+      width: min(100% - 24px, 1050px);
+      padding-top: 32px;
+    }
+
+    .section-intro {
+      display: block;
+    }
+
+    .section-intro p {
+      margin-top: 7px;
+    }
+
+    .category-button {
+      min-height: 68px;
+      padding: 12px 15px;
+    }
+
+    .number {
+      width: 25px;
+      margin-right: 10px;
+      font-size: 11px;
+    }
+
+    .category-meta {
+      display: none;
+    }
+
+    .modal {
+      padding: 10px;
+    }
+
+    .modal-card {
+      max-height: calc(100vh - 20px);
+      border-radius: 12px;
+    }
+
+    .modal-header {
+      padding: 15px;
+    }
+
+    .modal-body {
+      display: block;
+    }
+
+    .video-column {
+      padding: 12px;
+    }
+
+    .projects-column {
+      padding: 18px 15px 24px;
+    }
+
+    .modal-footer {
+      padding: 12px 15px;
+    }
+
+    .footer-note {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { transition: none !important; }
+  }
+</style>
+</head>
+
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Project Visualization Portfolio</p>
+    <h1>Explore the work that interests you.</h1>
+    <p class="intro">
+      These videos showcase projects across transportation, infrastructure,
+      visualization, environmental services, and cultural resources.
+      Select a category below to watch its video and see the projects featured.
+    </p>
+    <div class="instruction">
+      <span class="instruction-dot"></span>
+      Select a category to watch
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="section-intro">
+    <div>
+      <h2>Explore by discipline</h2>
+      <p>The videos below correspond to the segments shown at the event.</p>
+    </div>
+  </div>
+
+  <div class="category-list" id="categoryList"></div>
+</main>
+
+<footer>
+  Project visualization portfolio
+</footer>
+
+<!-- Video/project modal -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+  <div class="modal-card">
+
+    <div class="modal-header">
+      <div class="modal-title-wrap">
+        <h2 id="modalTitle"></h2>
+        <p id="modalSubtitle"></p>
+      </div>
+      <button class="close" id="closeModal" type="button" aria-label="Close video">×</button>
+    </div>
+
+    <div class="modal-body">
+      <div class="video-column">
+        <div class="video-wrapper">
+          <iframe
+            id="vimeoPlayer"
+            src=""
+            allow="autoplay; fullscreen; picture-in-picture"
+            allowfullscreen
+            title="Project video">
+          </iframe>
+        </div>
+        <p class="video-note">Video will begin automatically after selecting a category.</p>
+      </div>
+
+      <aside class="projects-column">
+        <h3>Projects featured</h3>
+        <p class="project-count" id="projectCount"></p>
+        <ul class="project-list" id="projectList"></ul>
+      </aside>
+    </div>
+
+    <div class="modal-footer">
+      <p class="footer-note">Select another category after closing this video to explore a different discipline.</p>
+      <a class="vimeo-link" id="vimeoLink" href="#" target="_blank" rel="noopener">Open on Vimeo ↗</a>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  const categories = [
+    {
+      label: "MAJOR HIGHWAY",
+      title: "Major Highway",
+      video: "1225936630",
+      projects: [
+        "CUY-82 at I-71 Ramp Improvements",
+        "FRA-270 Widening, I-70 to US 33",
+        "Gender Rd, Phase 6",
+        "CUY-271 at Brainard Rd/Cedar Rd Interchange Improvements",
+        "BUT-129 at I-75 Interchange Reconstruction",
+        "HAM-75 at Western Hills Viaduct Interchange",
+        "BEL-70 at US 40/SR 331 Interchange"
+      ]
+    },
+    {
+      label: "ROADWAY",
+      title: "Roadway",
+      video: "1225936703",
+      projects: [
+        "Dublin, University Blvd & Shier Rings Rd",
+        "Grove City, Demorest Rd",
+        "OSU, Cannon Dr Relocation",
+        "Dublin, Metro Center Overpass Connection",
+        "Grove City, Southwest Gateway",
+        "Westerville, Uptown Improvements",
+        "Worthington, Northeast Gateway",
+        "New Albany, Intel Roadways",
+        "OSU, 12th Ave Bus Connector",
+        "Westerville, Cleveland Ave/Schrock Rd Improvements",
+        "Columbus, Livingston Avenue 18th Street to Nelson Road",
+        "Hilliard, Leap Road Corridor Improvements"
+      ]
+    },
+    {
+      label: "STRUCTURES",
+      title: "Bridges",
+      video: "1225936749",
+      projects: [
+        "Dublin, Bridge St Corridor",
+        "Medina, Guilford Rd Bridge",
+        "MOT-75 over Albany St",
+        "New Albany Raines Crossing Bridge",
+        "COL-14 over SR 11",
+        "Gahanna Big Walnut Trail, Phase 4 & 8",
+        "Grove City, I-71 Overpass North Meadows Drive Planning Assessment"
+      ]
+    },
+    {
+      label: "ROUNDABOUTS",
+      title: "Roundabouts",
+      video: "1225936705",
+      projects: [
+        "LOG-33 at SR 274",
+        "Richland County, Cook Rd/Manfield-Lucas Rd",
+        "Richland County, Lexington Springmill Rd/Home Rd",
+        "Gahanna, Taylor Station Rd/Claycraft Rd"
+      ]
+    },
+    {
+      label: "VISUAL SOLUTIONS",
+      title: "Visual Solutions",
+      video: "1225936632",
+      projects: [
+        "Design Innovation",
+        "New Albany Business Park Flythrough",
+        "Summit Metro Parks Gorge Metro Park Dam Removal",
+        "Columbus Franklinton Detention Basin Solutions",
+        "Mansfield, Main St Improvements",
+        "CSCC, Ohio Center",
+        "Lima, Streetscape Improvements",
+        "Knox County Cook Road Historic Bridge",
+        "Hilliard, Scioto Darby Rd/Cosgray Rd",
+        "ODNR Gorge Overlook Trail Improvements Concepts",
+        "Mansfield SR 13 Roadway Improvements",
+        "Columbus Water Reuse GIS",
+        "Green Traffic Simulation"
+      ]
+    },
+    {
+      label: "CULTURAL RESOURCES",
+      title: "Cultural Resources",
+      video: "1225936631",
+      projects: [
+        "Fairfield County Phase II Subsurface & Geophysical Surveys",
+        "Franklin County Rose Run Cemetery",
+        "Knox County Historic Cooke Road Bridge Full Environmental & Cultural Services",
+        "Licking County South Fork Cultural Resources",
+        "Licking County Gradiometer Survey, Phase III Archaeological Monitoring"
+      ]
+    },
+    {
+      label: "ENVIRONMENTAL SERVICES",
+      title: "Environmental Services",
+      video: "1225936629",
+      projects: [
+        "Union County Big Darby Creek Federal Mussel Survey",
+        "SR 315 Bridge over the Olentangy River",
+        "SUM-CR8 High Level Bridge Full Environmental Services",
+        "Central Ohio Pooled Wetland Mitigation Site",
+        "Allen County SR 117 Widening RMR Investigation"
+      ]
+    }
+  ];
+
+  const categoryList = document.getElementById("categoryList");
+  const modal = document.getElementById("modal");
+  const modalCard = document.querySelector(".modal-card");
+  const closeModal = document.getElementById("closeModal");
+  const vimeoPlayer = document.getElementById("vimeoPlayer");
+  const modalTitle = document.getElementById("modalTitle");
+  const modalSubtitle = document.getElementById("modalSubtitle");
+  const projectCount = document.getElementById("projectCount");
+  const projectList = document.getElementById("projectList");
+  const vimeoLink = document.getElementById("vimeoLink");
+
+  let lastFocusedButton = null;
+
+  categories.forEach((category, index) => {
+    const button = document.createElement("button");
+    button.className = "category-button";
+    button.type = "button";
+    button.innerHTML = `
+      <span class="number">${String(index + 1).padStart(2, "0")}</span>
+      <span class="category-name">${category.label}</span>
+      <span class="category-meta">${category.projects.length} projects</span>
+      <span class="arrow" aria-hidden="true">›</span>
+    `;
+
+    button.addEventListener("click", () => openCategory(category, button));
+    categoryList.appendChild(button);
+  });
+
+  function openCategory(category, button) {
+    lastFocusedButton = button;
+
+    modalTitle.textContent = category.title;
+    modalSubtitle.textContent =
+      `${category.projects.length} projects featured in this video`;
+
+    projectCount.textContent =
+      `${category.projects.length} ${category.projects.length === 1 ? "project" : "projects"}`;
+
+    projectList.innerHTML = "";
+
+    category.projects.forEach(project => {
+      const li = document.createElement("li");
+      li.textContent = project;
+      projectList.appendChild(li);
+    });
+
+    vimeoPlayer.src =
+      `https://player.vimeo.com/video/${category.video}` +
+      `?autoplay=1&title=0&byline=0&portrait=0&dnt=1&playsinline=1`;
+
+    vimeoLink.href = `https://vimeo.com/${category.video}`;
+
+    modal.classList.add("open");
+    document.body.style.overflow = "hidden";
+
+    // Start the modal at the top even if the user had scrolled.
+    modalCard.scrollTop = 0;
+
+    setTimeout(() => closeModal.focus(), 50);
+  }
+
+  function closeVideo() {
+    // Clearing the iframe stops playback.
+    vimeoPlayer.src = "";
+    modal.classList.remove("open");
+    document.body.style.overflow = "";
+
+    if (lastFocusedButton) {
+      lastFocusedButton.focus();
+    }
+  }
+
+  closeModal.addEventListener("click", closeVideo);
+
+  modal.addEventListener("click", event => {
+    if (event.target === modal) closeVideo();
+  });
+
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape" && modal.classList.contains("open")) {
+      closeVideo();
+    }
+  });
+</script>
+
+</body>
+</html>
