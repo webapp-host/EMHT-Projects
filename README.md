@@ -1,4 +1,4 @@
-# Project Visualization Portfolio
+# Project Portfolio
 
 A single-page, mobile-friendly video portfolio designed for static hosting with GitHub Pages. Visitors select a project discipline to open its Vimeo video and view the projects featured in that category.
 
